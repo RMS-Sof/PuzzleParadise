@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Paradise</title>
+    <style>
+        :root {
+            --primary: #6a0dad;
+            --secondary: #ff8c00;
+            --tertiary: #4caf50;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .title {
+            font-size: 4rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+            font-weight: 300;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .puzzle-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .puzzle-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .puzzle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s ease;
+        }
+        
+        .puzzle-card:hover::before {
+            transform: scale(1.1);
+        }
+        
+        .puzzle-content {
+            padding: 1.5rem;
+            margin-top: 160px;
+            z-index: 1;
+            background: white;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .puzzle-title {
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem 0;
+            color: var(--dark);
+        }
+        
+        .puzzle-description {
+            color: #6c757d;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        
+        .puzzle-link {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(106, 13, 173, 0.3);
+        }
+        
+        .puzzle-link:hover {
+            background-color: #5a0b9a;
+            transform: translateY(-2px);
+        }
+        
+        .snake-ladder::before {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/api/placeholder/400/320');
+            background-color: var(--secondary);
+        }
+        
+        .crossword::before {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/api/placeholder/400/320');
+            background-color: var(--tertiary);
+        }
+        
+        .hanoi::before {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/api/placeholder/400/320');
+            background-color: #e91e63;
+        }
+        
+        .matching::before {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/api/placeholder/400/320');
+            background-color: #2196f3;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--secondary), 0 0 20px var(--secondary);
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--secondary), 0 0 40px var(--secondary);
+            }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .puzzle-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 2;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="title">Puzzle Paradise - By Prof. Rahul M. Samant</h1>
+        <p class="subtitle">Challenge Your Mind with Our Exciting Collection</p>
+    </header>
+
+    <div class="container">
+        <div class="puzzle-grid">
+            <!-- Snake and Ladder -->
+            <div class="puzzle-card snake-ladder">
+                <div class="puzzle-badge floating">New</div>
+                <div class="puzzle-content">
+                    <h2 class="puzzle-title">Snake & Ladder</h2>
+                    <p class="puzzle-description">Roll the dice and navigate through a maze of ladders and snakes in this classic board game.</p>
+                    <a href="https://rms-sof.github.io/SnakeLadderGame/" class="puzzle-link">Play Now</a>
+                </div>
+            </div>
+            
+            <!-- Crossword -->
+            <div class="puzzle-card crossword">
+                <div class="puzzle-content">
+                    <h2 class="puzzle-title">Crossword</h2>
+                    <p class="puzzle-description">Test your vocabulary and problem-solving skills with our daily crossword puzzles.</p>
+                    <a href="https://rms-sof.github.io/CrossWord/" class="puzzle-link">Play Now</a>
+                </div>
+            </div>
+            
+            <!-- Tower of Hanoi -->
+            <div class="puzzle-card hanoi">
+                <div class="puzzle-badge floating">Hot</div>
+                <div class="puzzle-content">
+                    <h2 class="puzzle-title">Tower of Hanoi</h2>
+                    <p class="puzzle-description">Move the entire stack of disks from one rod to another with the minimum number of moves.</p>
+                    <a href="https://rms-sof.github.io/Hanoi/" class="puzzle-link">Play Now</a>
+                </div>
+            </div>
+          <!-- Tic-Tac-Toe -->
+            <div class="puzzle-card hanoi">
+                <div class="puzzle-badge floating">Hot</div>
+                <div class="puzzle-content">
+                    <h2 class="puzzle-title">Tic-Tac-Toe</h2>
+                    <p class="puzzle-description"> The game of  cross and Zero.</p>
+                    <a href="https://rahulsamant2019.github.io/TTTGame/" class="puzzle-link">Play Now</a>
+                </div>
+            </div>
+          <!-- Slider Puzzle -->
+            <div class="puzzle-card hanoi">
+                <div class="puzzle-badge floating">Hot</div>
+                <div class="puzzle-content">
+                    <h2 class="puzzle-title">Slider Puzzle</h2>
+                    <p class="puzzle-description">Move and arrange the tiles in ascending order.</p>
+                    <a href="https://rms-sof.github.io/Slider/" class="puzzle-link">Play Now</a>
+                </div>
+            </div>
+          
+            <!-- Matching the Pair -->
+            <div class="puzzle-card matching">
+                <div class="puzzle-content">
+                    <h2 class="puzzle-title">Matching the Pair</h2>
+                    <p class="puzzle-description">Find and match identical pairs of cards in this memory-enhancing game.</p>
+                    <a href=" https://rms-sof.github.io/Matching/" class="puzzle-link">Play Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Puzzle Paradise. All rights reserved.</p>
+    </footer>
+</body>
+</html>
